@@ -1,0 +1,28 @@
+name: ClusterFuzzLite PR fuzzing
+on:
+  pull_request:
+    paths:
+      - '**'
+permissions: read-all
+jobs:
+  PR:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build Fuzzers
+      id: build
+      uses: google/clusterfuzzlite/actions/build_fuzzers@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        mode: 'code-change'
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo-branch-coverage: gh-pages
+    - name: Run Fuzzers
+      id: run
+      uses: google/clusterfuzzlite/actions/run_fuzzers@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        fuzz-seconds: 120
+        mode: 'code-change'
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo-branch-coverage: pr-coverage
+        
