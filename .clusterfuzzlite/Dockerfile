@@ -16,6 +16,6 @@
 
 FROM gcr.io/oss-fuzz-base/base-builder
 
-COPY . $SRC/clusterfuzzlite-example
-WORKDIR clusterfuzzlite-example
+COPY . $SRC/clusterfuzzlite-example1
+WORKDIR clusterfuzzlite-example1
 COPY .clusterfuzzlite/build.sh $SRC/
