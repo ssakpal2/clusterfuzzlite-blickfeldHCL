@@ -36,15 +36,15 @@ check: all
 
 # Fuzz target
 Libfuzzer: Libfuzzer.o Blickfeld_feature.o Blickfeld_functions.o $(LIB_FUZZING_ENGINE)
-    $(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 	
 # Object files
 Libfuzzer.o: Libfuzzer.cpp Blickfeld_feature.hpp Blickfeld_functions.hpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 Blickfeld_feature.o: Blickfeld_feature.cpp Blickfeld_feature.hpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 Blickfeld_functions.o: Blickfeld_functions.cpp Blickfeld_functions.hpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
