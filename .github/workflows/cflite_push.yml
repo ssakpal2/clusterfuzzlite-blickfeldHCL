@@ -1,0 +1,24 @@
+name: Push Fuzzing
+on:
+  push:
+    branches:
+      - main  # Use your actual default branch here.
+permissions: read-all
+jobs:
+  PushFuzzing:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build Fuzzers
+      id: build
+      uses: google/clusterfuzzlite/actions/build_fuzzers@v1
+    - name: Run Fuzzers
+      id: run
+      uses: google/clusterfuzzlite/actions/run_fuzzers@v1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        fuzz-seconds: 120
+        mode: 'code-change'
+        # Git storage repo options.
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo-branch: main   # Optional. Defaults to "main"
+        storage-repo-branch-coverage: gh-pages-old # Optional. Defaults to "gh-pages".
