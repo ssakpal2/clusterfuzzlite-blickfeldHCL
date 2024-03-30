@@ -35,7 +35,7 @@ check: all
 	./Libfuzzer
 
 # Fuzz target
-Libfuzzer: Libfuzzer.o Blickfeld_feature.o Blickfeld_functions.o $(LIB_FUZZING_ENGINE)
+Libfuzzer: Libfuzzer.o $(LIB_FUZZING_ENGINE)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 	
@@ -43,8 +43,4 @@ Libfuzzer: Libfuzzer.o Blickfeld_feature.o Blickfeld_functions.o $(LIB_FUZZING_E
 Libfuzzer.o: Libfuzzer.cpp Blickfeld_feature.hpp Blickfeld_functions.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-Blickfeld_feature.o: Blickfeld_feature.cpp Blickfeld_feature.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-Blickfeld_functions.o: Blickfeld_functions.cpp Blickfeld_functions.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
