@@ -14,8 +14,7 @@
 # to link the fuzzer(s) against a real fuzzing engine.
 #
 # OSS-Fuzz will define its own value for LIB_FUZZING_ENGINE.
-LIB_FUZZING_ENGINE ?= Libfuzzer.o
-$(info $$LIB_FUZZING_ENGINE is [${LIB_FUZZING_ENGINE}])
+
 
 # Values for CC, CFLAGS, CXX, CXXFLAGS are provided by OSS-Fuzz.
 # Outside of OSS-Fuzz use the ones you prefer or rely on the default values.
