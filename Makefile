@@ -40,7 +40,7 @@ Libfuzzer: Libfuzzer.o $(LIB_FUZZING_ENGINE)
 
 	
 # Object files
-Libfuzzer.o: Libfuzzer.cpp Blickfeld_feature.hpp Blickfeld_functions.hpp
+Libfuzzer.o: Libfuzzer.cpp Blickfeld_features.hpp Blickfeld_functions.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
