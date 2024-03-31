@@ -15,6 +15,11 @@
 ################################################################################
 
 FROM gcr.io/oss-fuzz-base/base-builder
+RUN apt-get update
+RUN apt-get -y install ros-iron-pcl-conversions clang && apt-get clean
+RUN bash -c "cd .. && rosdep install --from-paths src --ignore-src -r -y"
+RUN bash -c "cd /root && apt install -y wget libprotobuf-dev libprotobuf23 && apt install -y git build-essential libprotobuf-dev libprotoc-dev protobuf-compiler && apt install -y git build-essential autoconf automake libtool curl unzip"
+RUN bash -c "cd /root && git clone --recursive https://github.com/Blickfeld/blickfeld-scanner-lib.git && mkdir blickfeld-scanner-lib/build && cd blickfeld-scanner-lib/build && cmake .. && make && make install"
 
 COPY . $SRC/clusterfuzzlite-example1
 WORKDIR clusterfuzzlite-example1
