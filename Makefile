@@ -22,8 +22,7 @@
 # OSS-Fuzz will use different -fsanitize=* flags for different builds (asan, ubsan, msan, ...)
 
 # You may add extra compiler flags like this:
-CXX = g++
-CXXFLAGS += -std=c++11 -Wall -Wextra -fsanitize=fuzzer
+CXXFLAGS += -std=c++11 
 
 all: Libfuzzer 
 
