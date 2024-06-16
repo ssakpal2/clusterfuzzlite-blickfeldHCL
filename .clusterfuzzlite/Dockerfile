@@ -35,7 +35,10 @@ RUN apt-get update && \
     python3-rosinstall \
     python3-rosinstall-generator \
     python3-wstool \
-    build-essential
+    build-essential \
+    clang \
+    cmake \
+    ninja-build
 
 # Initialize rosdep
 RUN rosdep init && \
@@ -58,16 +61,18 @@ RUN apt-get install -y \
     automake \
     libtool \
     curl \
-    unzip
+    unzip \
+    libpcl-dev \
+    libboost-system-dev
 
 # Clone and build blickfeld-scanner-lib
 RUN cd /root && \
     git clone --recursive https://github.com/Blickfeld/blickfeld-scanner-lib.git && \
     mkdir blickfeld-scanner-lib/build && \
     cd blickfeld-scanner-lib/build && \
-    cmake .. && \
-    make && \
-    make install
+    cmake -G Ninja .. && \
+    cmake --build . --verbose && \
+    cmake --install .
 
 COPY . $SRC/clusterfuzzlite-blickfeldHCL
 WORKDIR $SRC/clusterfuzzlite-blickfeldHCL
