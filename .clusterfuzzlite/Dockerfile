@@ -24,8 +24,8 @@ RUN apt-get update && \
     software-properties-common
 
 # Add ROS 2 apt repository
-RUN curl -sSL http://packages.ros.org/ros2/ubuntu/gpg.key | apt-key add - && \
-    sh -c 'echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - && \
+    echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list
 
 # Install ROS 2 packages and rosdep
 RUN apt-get update && \
