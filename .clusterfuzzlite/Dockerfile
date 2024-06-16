@@ -50,7 +50,6 @@ RUN cd /root && rosdep install --from-paths src --ignore-src -r -y
 RUN apt-get install -y \
     wget \
     libprotobuf-dev \
-    libprotobuf23 \
     git \
     build-essential \
     libprotoc-dev \
