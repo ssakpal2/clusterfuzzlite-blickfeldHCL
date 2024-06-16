@@ -19,6 +19,6 @@ jobs:
         fuzz-seconds: 120
         mode: 'code-change'
         # Git storage repo options.
-        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/ssakpal2/clusterfuzzliteHCL-blickfeld-storage.git
         storage-repo-branch: main   # Optional. Defaults to "main"
         storage-repo-branch-coverage: gh-pages-old # Optional. Defaults to "gh-pages".
