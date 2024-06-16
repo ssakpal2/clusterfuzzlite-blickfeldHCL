@@ -15,7 +15,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         fuzz-seconds: 120
         mode: 'code-change'
-        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/ssakpal2/clusterfuzzliteHCL-blickfeld-storage.git
         storage-repo-branch-coverage: gh-pages
     - name: Run Fuzzers
       id: run
@@ -25,6 +25,6 @@ jobs:
         fuzz-seconds: 120
         mode: 'batch'
         # Git storage repo options.
-        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/yang-fu-git/clusterfuzzlite-example-storage.git
+        storage-repo: https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/ssakpal2/clusterfuzzliteHCL-blickfeld-storage.git
         storage-repo-branch: main   # Optional. Defaults to "main"
         storage-repo-branch-coverage: gh-pages  # Optional. Defaults to "gh-pages".
