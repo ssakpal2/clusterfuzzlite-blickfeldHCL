@@ -41,13 +41,13 @@ check: all
 #	${CXX} ${CXXFLAGS} $< my_api.a -o $
 
 	
-Lib_fuzzer: Lib_fuzzer.cpp calculator.a standalone_fuzz_target_runner.o
-	${CXX} ${CXXFLAGS} $< calculator.a ${LIB_FUZZING_ENGINE} -o $@
+Lib_fuzzer: Lib_fuzzer.cpp blickfeld_function.a standalone_fuzz_target_runner.o
+	${CXX} ${CXXFLAGS} $< blickfeld_function.a ${LIB_FUZZING_ENGINE} -o $@
 	zip -q -r do_stuff_fuzzer_seed_corpus.zip . -i do_stuff_test_data
 
 
 # The library itself.
-calculator.a: calculator.cpp calculator.hpp
+blickfeld_function.a: lidar_provider.cpp blickfeld_features.hpp blickfeld_functions.hpp
 	${CXX} ${CXXFLAGS} $^ -c
 	ar ruv calculator.a calculator.o 
 
