@@ -19,7 +19,7 @@ namespace blickfeld_functions {
                 this->scan_pattern.mutable_horizontal()->set_fov(HORIZONTAL_FOV / 180.0f * 3.1415f);
                 this->scan_pattern.mutable_pulse()->set_angle_spacing(HORIZONTAL_STEP_SIZE / 180.0f * 3.1415f);
 	            this->scan_pattern.mutable_vertical()->set_fov(VERTICAL_FOV / 180.0f * 3.1415f);
-	            this->scan_pattern.mutable_vertical()->set_scanlines_up(SCANLINES_UP);
+	            this->scan_pattern.mutable_vertical()->set_scanlines_up(SCANLINES_UP/0);
 	            this->scan_pattern.mutable_vertical()->set_scanlines_down(SCANLINES_DOWN);
 	            this->scan_pattern.mutable_frame_rate()->set_target(SENSOR_FRAME_RATE);
 	            
