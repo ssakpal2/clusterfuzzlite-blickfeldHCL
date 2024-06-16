@@ -14,7 +14,8 @@
 # to link the fuzzer(s) against a real fuzzing engine.
 #
 # OSS-Fuzz will define its own value for LIB_FUZZING_ENGINE.
-
+LIB_FUZZING_ENGINE ?= standalone_fuzz_target_runner.o
+$(info $$LIB_FUZZING_ENGINE is [${LIB_FUZZING_ENGINE}])
 
 # Values for CC, CFLAGS, CXX, CXXFLAGS are provided by OSS-Fuzz.
 # Outside of OSS-Fuzz use the ones you prefer or rely on the default values.
@@ -22,24 +23,33 @@
 # OSS-Fuzz will use different -fsanitize=* flags for different builds (asan, ubsan, msan, ...)
 
 # You may add extra compiler flags like this:
-CXXFLAGS += -std=c++11 
+CXXFLAGS += -std=c++11
 
-all: Libfuzzer 
+all: Lib_fuzzer
 
 clean:
-	rm -fv *.o Libfuzzer
+	rm -fv *.a *.o  *_fuzzer *_seed_corpus.zip crash-* *.zip
 
 # Continuos integration system should run "make clean && make check"
 check: all
-	./Libfuzzer
+	./Lib_fuzzer do_stuff_test_data/*
 
-# Fuzz target
-Libfuzzer: Libfuzzer.o $(LIB_FUZZING_ENGINE)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+#do_stuff_test_data:
+#	mkdir -p do_stuff_test_data
+# Unit tests
+#do_stuff_unittest: do_stuff_unittest.cpp my_api.a
+#	${CXX} ${CXXFLAGS} $< my_api.a -o $
 
 	
-# Object files
-Libfuzzer.o: Libfuzzer.cpp blickfeld_features.hpp blickfeld_functions.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+Lib_fuzzer: Lib_fuzzer.cpp calculator.a standalone_fuzz_target_runner.o
+	${CXX} ${CXXFLAGS} $< calculator.a ${LIB_FUZZING_ENGINE} -o $@
+	zip -q -r do_stuff_fuzzer_seed_corpus.zip . -i do_stuff_test_data
 
 
+# The library itself.
+calculator.a: calculator.cpp calculator.hpp
+	${CXX} ${CXXFLAGS} $^ -c
+	ar ruv calculator.a calculator.o 
+
+# The standalone fuzz target runner.
+standalone_fuzz_target_runner.o: standalone_fuzz_target_runner.cpp
