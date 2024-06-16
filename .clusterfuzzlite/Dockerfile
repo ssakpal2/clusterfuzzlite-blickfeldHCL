@@ -15,10 +15,61 @@
 ################################################################################
 FROM gcr.io/oss-fuzz-base/base-builder
 
-RUN bash -c "cd .. && rosdep install --from-paths src --ignore-src -r -y"
-RUN bash -c "cd /root && apt install -y wget libprotobuf-dev libprotobuf23 && apt install -y git build-essential libprotobuf-dev libprotoc-dev protobuf-compiler && apt install -y git build-essential autoconf automake libtool curl unzip"
-RUN bash -c "cd /root && git clone --recursive https://github.com/Blickfeld/blickfeld-scanner-lib.git && mkdir blickfeld-scanner-lib/build && cd blickfeld-scanner-lib/build && cmake .. && make && make install"
+# Install ROS 2 dependencies
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    gnupg2 \
+    lsb-release \
+    software-properties-common
+
+# Add ROS 2 apt repository
+RUN curl -sSL http://packages.ros.org/ros2/ubuntu/gpg.key | apt-key add - && \
+    sh -c 'echo "deb http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
+
+# Install ROS 2 packages and rosdep
+RUN apt-get update && \
+    apt-get install -y \
+    ros-foxy-ros-base \
+    python3-rosdep \
+    python3-rosinstall \
+    python3-rosinstall-generator \
+    python3-wstool \
+    build-essential
+
+# Initialize rosdep
+RUN rosdep init && \
+    rosdep update
+
+# Install dependencies for your project
+RUN mkdir -p /root/src
+COPY . /root/src
+RUN cd /root && rosdep install --from-paths src --ignore-src -r -y
+
+# Install additional dependencies
+RUN apt-get install -y \
+    wget \
+    libprotobuf-dev \
+    libprotobuf23 \
+    git \
+    build-essential \
+    libprotoc-dev \
+    protobuf-compiler \
+    autoconf \
+    automake \
+    libtool \
+    curl \
+    unzip
+
+# Clone and build blickfeld-scanner-lib
+RUN cd /root && \
+    git clone --recursive https://github.com/Blickfeld/blickfeld-scanner-lib.git && \
+    mkdir blickfeld-scanner-lib/build && \
+    cd blickfeld-scanner-lib/build && \
+    cmake .. && \
+    make && \
+    make install
 
 COPY . $SRC/clusterfuzzlite-blickfeldHCL
-WORKDIR clusterfuzzlite-blickfeldHCL
+WORKDIR $SRC/clusterfuzzlite-blickfeldHCL
 COPY .clusterfuzzlite/build.sh $SRC/
