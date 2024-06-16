@@ -1,4 +1,4 @@
-# Copyright 2017 Google Inc. All Rights Reserved.
+# Copyright 2017 Google Inc.
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 # Simple example of a build file that nicely integrates a fuzz target
@@ -25,31 +25,41 @@ $(info $$LIB_FUZZING_ENGINE is [${LIB_FUZZING_ENGINE}])
 # You may add extra compiler flags like this:
 CXXFLAGS += -std=c++11
 
+# Paths to external libraries (adjust paths as necessary)
+PCL_INCLUDE_DIRS = /path/to/pcl/include
+PCL_LIBRARY_DIRS = /path/to/pcl/lib
+BOOST_LIBRARY_DIRS = /path/to/boost/lib
+
+INCLUDE_DIRS = -I${PCL_INCLUDE_DIRS}
+LIBRARY_DIRS = -L${PCL_LIBRARY_DIRS} -L${BOOST_LIBRARY_DIRS}
+
+# Libraries
+LIBS = -lpcl_common -lboost_system -lprotobuf -lblickfeld
+
+# Targets
 all: Lib_fuzzer
 
 clean:
 	rm -fv *.a *.o  *_fuzzer *_seed_corpus.zip crash-* *.zip
 
-# Continuos integration system should run "make clean && make check"
+# Continuous integration system should run "make clean && make check"
 check: all
 	./Lib_fuzzer do_stuff_test_data/*
 
-#do_stuff_test_data:
-#	mkdir -p do_stuff_test_data
-# Unit tests
-#do_stuff_unittest: do_stuff_unittest.cpp my_api.a
-#	${CXX} ${CXXFLAGS} $< my_api.a -o $
-
-	
-Lib_fuzzer: Lib_fuzzer.cpp blickfeld_function.a standalone_fuzz_target_runner.o
-	${CXX} ${CXXFLAGS} $< blickfeld_function.a ${LIB_FUZZING_ENGINE} -o $@
+Lib_fuzzer: Lib_fuzzer.o blickfeld_function.a standalone_fuzz_target_runner.o
+	${CXX} ${CXXFLAGS} Lib_fuzzer.o blickfeld_function.a ${LIB_FUZZING_ENGINE} ${LIBRARY_DIRS} ${LIBS} -o $@
 	zip -q -r do_stuff_fuzzer_seed_corpus.zip . -i do_stuff_test_data
 
+Lib_fuzzer.o: Lib_fuzzer.cpp
+	${CXX} ${CXXFLAGS} ${INCLUDE_DIRS} -c Lib_fuzzer.cpp -o Lib_fuzzer.o
 
-# The library itself.
-blickfeld_function.a: lidar_provider.cpp blickfeld_features.hpp blickfeld_functions.hpp
-	${CXX} ${CXXFLAGS} $^ -c
-	ar ruv calculator.a calculator.o 
+blickfeld_function.a: lidar_provider.o
+	ar ruv blickfeld_function.a lidar_provider.o
 
-# The standalone fuzz target runner.
+lidar_provider.o: lidar_provider.cpp blickfeld_features.hpp blickfeld_functions.hpp
+	${CXX} ${CXXFLAGS} ${INCLUDE_DIRS} -c lidar_provider.cpp -o lidar_provider.o
+
 standalone_fuzz_target_runner.o: standalone_fuzz_target_runner.cpp
+	${CXX} ${CXXFLAGS} ${INCLUDE_DIRS} -c standalone_fuzz_target_runner.cpp -o standalone_fuzz_target_runner.o
+
+.PHONY: all clean check
